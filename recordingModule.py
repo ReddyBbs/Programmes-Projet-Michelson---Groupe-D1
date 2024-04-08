@@ -10,9 +10,7 @@ import cv2
 recording = True
 
 
-# Fonction inutile mais absolument cruciale
-# N'effectue absolument rien, mais est nécessaire pour le fonctionnement des
-# trackbars
+# N'execute aucun code, mais est nécessaire pour le fonctionnement des trackbars
 def nothing(x):
     pass
 
@@ -96,7 +94,8 @@ def record_from_camera(index=0, res=(640,480), fps=60., filename='output.avi', c
     gain = cap.get(cv2.CAP_PROP_GAIN)
         
     cv2.namedWindow('frame')
-    
+
+    # Création des trackbars permettant de modifier les paramètres vidéo
     recName = 'Recording'
     cv2.createTrackbar(recName, 'frame', 0, 1, nothing)
     cv2.createTrackbar('Grayscale', 'frame', int(grayscale), 1, nothing)
