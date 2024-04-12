@@ -13,10 +13,6 @@ from datetime import datetime
 
 #%% Fonctions préliminaires
 
-def nothing(x):
-    pass
-
-
 def on_click(event, x, y, p1, p2):
     if event == cv2.EVENT_LBUTTONDOWN:
         global pxArray
