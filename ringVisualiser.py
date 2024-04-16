@@ -54,6 +54,11 @@ def intensity_graph_slice(filename='output.avi'):
     clicked = False
     pxArray = []
     
+    weights = np.array([[.01, .02, .04, .02, .01],
+                    [.02, .04, .08, .04, .02],
+                    [.04, .08, .16, .08, .04],
+                    [.02, .04, .08, .04, .02],
+                    [.01, .02, .04, .02, .01]])
     
     global width, height
     width  = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -92,7 +97,8 @@ def intensity_graph_slice(filename='output.avi'):
         
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         for k in range(int(x2-x1)):
-            intensityArray[k].append(float(frame[pxLineArray[k]]))
+            y, x = pxLineArray[k]
+            intensityArray[k].append(float(np.average(frame[y-2:y+3, x-2:x+3], weights=weights)))
     
     # When everything done, release the capture
     cap.release()
@@ -108,7 +114,7 @@ def intensity_graph_slice(filename='output.avi'):
 
 def graph_over_video(filename='output.avi', play=True):
     cap = cv2.VideoCapture(filename)
-    fps = cap.get(cv2.CAP_PROP_FPS)
+    fps = cap.get(cv2.CAP_PROP_FPS)/2
     delay = int(1/fps * 1e3) if play else 1
     
     global x1, x2, y
@@ -117,7 +123,7 @@ def graph_over_video(filename='output.avi', play=True):
     I = I/np.max(I)
     
     maxFrame = np.shape(I)[1]
-    I = I * height/4 
+    I = I * height/6 
     I = np.array(I, dtype=np.int32)
     I = [np.array([[x+x1,height - I[x,k] - 10] for x in range(int(x2-x1))], dtype=np.int32) for k in range(maxFrame)]
     
